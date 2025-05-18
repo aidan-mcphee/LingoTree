@@ -1,0 +1,6 @@
+{
+"scripts": {
+    "frontend-dev": "npm --prefix frontend run dev",
+    "backend-dev": "flask run"
+}
+}
