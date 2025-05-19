@@ -117,7 +117,7 @@ export const LoadGraph = ({ data }) => {
                 x: positionMap.get(node.id)?.x || 0,
                 y: positionMap.get(node.id)?.y || 0,
                 size: 15,  // Base size
-                label: node.name + ` (${depthMap.get(node.id)})`,  // Label with depth
+                label: node.name,  // Label with depth
                 color: "#FA4F40",
                 // Add custom properties from your JSON
                 meta: {
