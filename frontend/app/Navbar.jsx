@@ -1,13 +1,36 @@
 import { Link, useLocation } from "react-router";
+import { supabase_client } from "./supabase-client";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
+
+    // check if user is logged in
+
+    const [links, setLinks] = useState([]);
+
+    useEffect(() => {
+        supabase_client.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                setLinks([
+                    { to: "/home", label: "Home" },
+                    { to: "/upload", label: "Upload" },
+                    { to: "/test", label: "Test" },
+                    { to: "/about", label: "About" },
+                    { to: "/logout", label: "Logout" },
+                ]);
+                console.log("User is logged in");
+            } else {
+                setLinks([
+                    { to: "/", label: "About" },
+                    { to: "/login", label: "Login" },
+                ]);
+                console.log("User is not logged in");
+            }
+        });
+    }, []);
+
     const location = useLocation();
-    const links = [
-        { to: "/", label: "Home" },
-        { to: "/upload", label: "Upload" },
-        { to: "/test", label: "Test" },
-        { to: "/about", label: "About" },
-    ];
+
     return (
         <nav className="bg-white/80 dark:bg-gray-950/80 backdrop-blur border-b border-gray-200 dark:border-gray-800 shadow-sm sticky top-0 z-50 transition-colors">
             <div className="container mx-auto px-4 py-2 flex items-center justify-between">
