@@ -1,10 +1,10 @@
 import SquareGraph from "../components/SquareGraph";
 import { useEffect, useState } from "react";
-import { LoginRequiredRoute } from "../components/LoginRequiredRoute";
+import { useLoginRequired } from "../utils/authGuard";
 
 export default function Home() {
 
-  LoginRequiredRoute();
+  useLoginRequired();
 
   const [nodes, setNodes] = useState([]);
   const [loading, setLoading] = useState(true);

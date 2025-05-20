@@ -7,7 +7,6 @@ import {
 } from "react-router";
 import Navbar from "./components/Navbar";
 import { useEffect } from "react";
-import { supabase_client } from "./components/supabase-client";
 
 import "./app.css";
 
