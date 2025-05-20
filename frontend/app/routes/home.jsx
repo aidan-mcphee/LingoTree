@@ -1,15 +1,10 @@
-import SquareGraph from "../SquareGraph";
+import SquareGraph from "../components/SquareGraph";
 import { useEffect, useState } from "react";
-
-
-export function meta() {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ];
-}
+import { LoginRequiredRoute } from "../components/LoginRequiredRoute";
 
 export default function Home() {
+
+  LoginRequiredRoute();
 
   const [nodes, setNodes] = useState([]);
   const [loading, setLoading] = useState(true);

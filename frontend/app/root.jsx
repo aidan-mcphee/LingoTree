@@ -5,9 +5,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import { useEffect } from "react";
-import { supabase_client } from "./supabase-client";
+import { supabase_client } from "./components/supabase-client";
 
 import "./app.css";
 

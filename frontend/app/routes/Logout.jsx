@@ -1,7 +1,7 @@
 // logout from supabase
 
 import { useEffect } from "react";
-import { supabase_client } from "../supabase-client";
+import { supabase_client } from "../components/supabase-client";
 
 export default function Logout() {
 
