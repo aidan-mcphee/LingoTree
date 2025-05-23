@@ -1,6 +1,7 @@
 import SquareGraph from "../components/SquareGraph";
 import { useEffect, useState } from "react";
 import { useLoginRequired } from "../utils/authGuard";
+import { supabase_client } from "../components/supabase-client";
 
 export default function Home() {
 
@@ -13,9 +14,10 @@ export default function Home() {
   useEffect(() => {
     const fetchNodes = async () => {
       try {
-        const response = await fetch('http://localhost:5000/nodeTest');
-        if (!response.ok) throw new Error('Failed to fetch');
-        const data = await response.json();
+        const { data, error } = await supabase_client
+          .from('nodes')
+          .select('*');
+        if (error) throw error;
         setNodes(data);
       } catch (err) {
         setError(err.message);
