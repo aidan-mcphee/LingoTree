@@ -18,14 +18,9 @@ export const LoadGraph = ({ data }) => {
             graph.addNode(node.id.toString(), {
                 x: positionMap.get(node.id)?.x || 0,
                 y: positionMap.get(node.id)?.y || 0,
-                size: 15,  // Base size
-                label: node.title,  // Label with depth
+                size: 15,
+                label: node.title, 
                 color: "#FA4F40",
-                // Add custom properties from your JSON
-                meta: {
-                    is_universal: node.is_universal,
-                    parent_id: node.parent_id
-                }
             });
         });
 
