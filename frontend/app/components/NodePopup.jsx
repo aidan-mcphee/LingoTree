@@ -1,4 +1,6 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function NodePopup({ open, onClose, markdown, translations }) {
     if (!open) return null;
@@ -17,8 +19,10 @@ export default function NodePopup({ open, onClose, markdown, translations }) {
                     ×
                 </button>
                 <div className="mb-6 overflow-y-auto max-h-72 prose dark:prose-invert">
-                    {/* Markdown content */}
-                    <div dangerouslySetInnerHTML={{ __html: markdown }} />
+                    {/* Render markdown content */}
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {markdown}
+                    </ReactMarkdown>
                 </div>
                 <div className="mt-2">
                     <h3 className="font-semibold mb-2">Translations</h3>
