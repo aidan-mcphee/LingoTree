@@ -6,14 +6,14 @@ import NodePopup from "./NodePopup";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
 import { OnClickNode } from "../utils/graphInputHandler";
 
-function GraphEvents({ setPopupOpen, setPopupContent }) {
+function GraphEvents({ setPopupOpen, setPopupContent, setPopupTitle }) {
     const sigma = useSigma();
     const registerEvents = useRegisterEvents();
 
     useEffect(() => {
         
         registerEvents({
-            clickNode: (event) => OnClickNode(event.node, sigma, setPopupOpen, setPopupContent),
+            clickNode: (event) => OnClickNode(event.node, sigma, setPopupOpen, setPopupContent, setPopupTitle)
         });
     }, [registerEvents]);
 };
@@ -60,15 +60,16 @@ export const LoadGraph = ({ data }) => {
 export default function SquareGraph({ data }) {
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupContent, setPopupContent] = useState({ markdown: "", translations: [] });
+    const [popupTitle, setPopupTitle] = useState("");
 
 
     return (
         <div className="w-full h-full">
             <SigmaContainer className="w-full h-full">
                 <LoadGraph data={data} />
-                <GraphEvents setPopupOpen={setPopupOpen} setPopupContent={setPopupContent} />
+                <GraphEvents setPopupOpen={setPopupOpen} setPopupContent={setPopupContent} setPopupTitle={setPopupTitle} />
             </SigmaContainer>
-            <NodePopup open={popupOpen} onClose={() => setPopupOpen(false)} markdown={popupContent.markdown} translations={popupContent.translations} />
+            <NodePopup open={popupOpen} onClose={() => setPopupOpen(false)} markdown={popupContent.markdown} translations={popupContent.translations} title={popupTitle} />
         </div>
     );
 }

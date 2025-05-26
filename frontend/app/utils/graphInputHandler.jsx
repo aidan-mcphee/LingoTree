@@ -1,6 +1,6 @@
 import { supabase_client } from "../components/supabase-client";
 
-export const OnClickNode = async (node, sigma, setPopupOpen, setPopupContent) => {
+export const OnClickNode = async (node, sigma, setPopupOpen, setPopupContent, setPopupTitle) => {
     const nodeData = sigma.getGraph().getNodeAttributes(node);
     const markdown = nodeData.metadata.markdown || "";
     let translations = [];
@@ -30,6 +30,7 @@ export const OnClickNode = async (node, sigma, setPopupOpen, setPopupContent) =>
         console.error("Error fetching translations:", error);
     }
 
+    setPopupTitle(nodeData.label || "Node Details");
     setPopupContent({ markdown, translations });
     setPopupOpen(true);
 }
