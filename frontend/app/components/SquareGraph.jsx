@@ -1,9 +1,22 @@
-import React, { useEffect } from "react";
-import { SigmaContainer, useLoadGraph } from "@react-sigma/core";
+import React, { useEffect, useState } from "react";
+import { SigmaContainer, useLoadGraph, useSigma, useRegisterEvents } from "@react-sigma/core";
 import "@react-sigma/core/lib/style.css";
 import Graph from "graphology";
+import NodePopup from "./NodePopup";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
-import { LayoutForceAtlas2Control } from "@react-sigma/layout-forceatlas2";
+import { OnClickNode } from "../utils/graphInputHandler";
+
+function GraphEvents({ setPopupOpen, setPopupContent }) {
+    const sigma = useSigma();
+    const registerEvents = useRegisterEvents();
+
+    useEffect(() => {
+        
+        registerEvents({
+            clickNode: (event) => OnClickNode(event.node, sigma, setPopupOpen, setPopupContent),
+        });
+    }, [registerEvents]);
+};
 
 export const LoadGraph = ({ data }) => {
     const loadGraph = useLoadGraph();
@@ -21,6 +34,9 @@ export const LoadGraph = ({ data }) => {
                 size: 15,
                 label: node.title, 
                 color: "#FA4F40",
+                metadata: {
+                    markdown: node.lesson_md || "",
+                }
             });
         });
 
@@ -42,11 +58,17 @@ export const LoadGraph = ({ data }) => {
 };
 
 export default function SquareGraph({ data }) {
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupContent, setPopupContent] = useState({ markdown: "", translations: [] });
+
+
     return (
         <div className="w-full h-full">
             <SigmaContainer className="w-full h-full">
                 <LoadGraph data={data} />
+                <GraphEvents setPopupOpen={setPopupOpen} setPopupContent={setPopupContent} />
             </SigmaContainer>
+            <NodePopup open={popupOpen} onClose={() => setPopupOpen(false)} markdown={popupContent.markdown} translations={popupContent.translations} />
         </div>
     );
 }

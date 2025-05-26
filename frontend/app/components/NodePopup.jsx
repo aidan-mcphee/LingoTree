@@ -26,7 +26,7 @@ export default function NodePopup({ open, onClose, markdown, translations }) {
                         <table className="min-w-[50%] max-w-[50%] table-auto border border-gray-300 dark:border-gray-700 rounded">
                             <thead>
                                 <tr>
-                                    <th className="px-2 py-1 border-b border-gray-200 dark:border-gray-700 text-left">Language</th>
+                                    <th className="px-2 py-1 border-b border-gray-200 dark:border-gray-700 text-left">Original</th>
                                     <th className="px-2 py-1 border-b border-gray-200 dark:border-gray-700 text-left">Translation</th>
                                 </tr>
                             </thead>
@@ -34,8 +34,8 @@ export default function NodePopup({ open, onClose, markdown, translations }) {
                                 {translations && translations.length > 0 ? (
                                     translations.map((t, i) => (
                                         <tr key={i}>
-                                            <td className="px-2 py-1 border-b border-gray-100 dark:border-gray-800 whitespace-nowrap">{t.language}</td>
-                                            <td className="px-2 py-1 border-b border-gray-100 dark:border-gray-800 break-words max-w-xs">{t.text}</td>
+                                            <td className="px-2 py-1 border-b border-gray-100 dark:border-gray-800 whitespace-nowrap">{t.original}</td>
+                                            <td className="px-2 py-1 border-b border-gray-100 dark:border-gray-800 break-words max-w-xs">{t.translation}</td>
                                         </tr>
                                     ))
                                 ) : (
