@@ -5,9 +5,6 @@ export const OnClickNode = async (node, sigma, setPopupOpen, setPopupContent) =>
     const markdown = nodeData.metadata.markdown || "";
     let translations = [];
 
-    console.log("Node data:", nodeData);
-    console.log("Node: ", node);
-
     const { data, error } = await supabase_client
         .from('nodes')
         .select(`
@@ -20,17 +17,12 @@ export const OnClickNode = async (node, sigma, setPopupOpen, setPopupContent) =>
                 )
         `).eq('id', node);
 
-    console.log("Node clicked:", node, nodeData);
-
     const translationsList = data.flatMap(node =>
         node.tags.map(tag => ({
             original: tag.translations.original_text,
             translation: tag.translations.translation_text
         }))
     );
-
-    console.log("Translations list:", translationsList);
-
 
     if (data && !error) {
         translations = translationsList;
