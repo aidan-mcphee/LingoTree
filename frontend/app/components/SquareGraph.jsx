@@ -6,14 +6,27 @@ import NodePopup from "./NodePopup";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
 import { OnClickNode } from "../utils/graphInputHandler";
 
-function GraphEvents({ setPopupOpen, setPopupContent, setPopupTitle }) {
+function GraphEvents({ setPopupOpen, setPopupContent, setPopupTitle, setContextMenu }) {
     const sigma = useSigma();
     const registerEvents = useRegisterEvents();
 
     useEffect(() => {
-        
         registerEvents({
-            clickNode: (event) => OnClickNode(event.node, sigma, setPopupOpen, setPopupContent, setPopupTitle)
+            clickNode: (event) => OnClickNode(event.node, sigma, setPopupOpen, setPopupContent, setPopupTitle),
+            rightClickNode: (event) => {
+                const nodeAttributes = sigma.getGraph().getNodeAttributes(event.node);
+                const {x, y} = nodeAttributes;
+
+                const screenCoords = sigma.graphToViewport({ x, y });
+                console.log("Screen coordinates:", screenCoords);
+
+                setContextMenu({
+                    visible: true,
+                    x: screenCoords.x,
+                    y: screenCoords.y,
+                    node: event.node
+                });
+            }
         });
     }, [registerEvents]);
 };
@@ -61,15 +74,44 @@ export default function SquareGraph({ data }) {
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupContent, setPopupContent] = useState({ markdown: "", translations: [] });
     const [popupTitle, setPopupTitle] = useState("");
+    const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, node: null });
 
+    // Hide context menu on click elsewhere
+    useEffect(() => {
+        const handleClick = () => setContextMenu({ ...contextMenu, visible: false });
+        if (contextMenu.visible) {
+            window.addEventListener("click", handleClick);
+        }
+        return () => window.removeEventListener("click", handleClick);
+    }, [contextMenu.visible]);
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full" onContextMenu={e => e.preventDefault()} style={{ position: "relative" }} >
             <SigmaContainer className="w-full h-full">
                 <LoadGraph data={data} />
-                <GraphEvents setPopupOpen={setPopupOpen} setPopupContent={setPopupContent} setPopupTitle={setPopupTitle} />
+                <GraphEvents setPopupOpen={setPopupOpen} setPopupContent={setPopupContent} setPopupTitle={setPopupTitle} setContextMenu={setContextMenu} />
             </SigmaContainer>
             <NodePopup open={popupOpen} onClose={() => setPopupOpen(false)} markdown={popupContent.markdown} translations={popupContent.translations} title={popupTitle} />
+            {contextMenu.visible && (
+                <ul
+                    style={{
+                        position: "fixed",
+                        top: contextMenu.y,
+                        left: contextMenu.x,
+                        background: "white",
+                        border: "1px solid #ccc",
+                        borderRadius: 4,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                        zIndex: 1000,
+                        padding: 0,
+                        margin: 0,
+                        listStyle: "none",
+                        minWidth: 100
+                    }}
+                >
+                    <li style={{ padding: "8px 16px", cursor: "pointer" }}>test1</li>
+                </ul>
+            )}
         </div>
     );
 }
