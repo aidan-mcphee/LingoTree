@@ -3,6 +3,7 @@ import { SigmaContainer, useLoadGraph, useSigma, useRegisterEvents } from "@reac
 import "@react-sigma/core/lib/style.css";
 import Graph from "graphology";
 import NodePopup from "./NodePopup";
+import ContextMenu from "./ContextMenu";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
 import { OnClickNode } from "../utils/graphInputHandler";
 
@@ -92,26 +93,26 @@ export default function SquareGraph({ data }) {
                 <GraphEvents setPopupOpen={setPopupOpen} setPopupContent={setPopupContent} setPopupTitle={setPopupTitle} setContextMenu={setContextMenu} />
             </SigmaContainer>
             <NodePopup open={popupOpen} onClose={() => setPopupOpen(false)} markdown={popupContent.markdown} translations={popupContent.translations} title={popupTitle} />
-            {contextMenu.visible && (
-                <ul
-                    style={{
-                        position: "fixed",
-                        top: contextMenu.y,
-                        left: contextMenu.x,
-                        background: "white",
-                        border: "1px solid #ccc",
-                        borderRadius: 4,
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                        zIndex: 1000,
-                        padding: 0,
-                        margin: 0,
-                        listStyle: "none",
-                        minWidth: 100
-                    }}
-                >
-                    <li style={{ padding: "8px 16px", cursor: "pointer" }}>test1</li>
-                </ul>
-            )}
+            <ContextMenu
+                visible={contextMenu.visible}
+                x={contextMenu.x}
+                y={contextMenu.y}
+                items={[
+                    {
+                        label: "Generate children",
+                        onClick: () => {
+                            console.log("Generate children for node:", contextMenu.node);
+                        }
+                    },
+                    {
+                        label : "Remove node",
+                        onClick: () => {
+                            console.log("Remove node:", contextMenu.node);
+                        }
+                    }
+                ]}
+                onClose={() => setContextMenu({ ...contextMenu, visible: false })}
+            />
         </div>
     );
 }
