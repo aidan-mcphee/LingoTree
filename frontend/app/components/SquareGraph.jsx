@@ -6,7 +6,7 @@ import NodePopup from "./NodePopup";
 import ContextMenu from "./ContextMenu";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
 import { OnClickNode } from "../utils/graphInputHandler";
-import { GenerateChildrenNodes } from "../utils/ContextMenuFunctions";
+import { GenerateChildrenNodes, DeleteNode } from "../utils/ContextMenuFunctions";
 
 const NODESIZE = 15;
 const EDGESIZE = 3;
@@ -116,6 +116,7 @@ export default function SquareGraph({ data }) {
         maxCameraRatio : 1,
         cameraPanBoundaries: { tolerance: 100 }
     }
+;
 
     return (
         <div className="w-full h-full" onContextMenu={e => e.preventDefault()} style={{ position: "relative" }} >
@@ -133,13 +134,13 @@ export default function SquareGraph({ data }) {
                     {
                         label: "Generate children",
                         onClick: () => {
-                            GenerateChildrenNodes(contextMenu.node);
+                            GenerateChildrenNodes(contextMenu.node, graph);
                         }
                     },
                     {
                         label : "Remove node",
                         onClick: () => {
-                            console.log("Remove node:", contextMenu.node);
+                            DeleteNode(contextMenu.node, graph, data);
                         }
                     }
                 ]}

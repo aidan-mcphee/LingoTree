@@ -38,3 +38,31 @@ export const GenerateChildrenNodes = async (parentId, graph) => {
         throw error;
     }
 }
+
+export const DeleteNode = async (node_id, graph, nodes) => { 
+    // look for nodes in nodes that have parent_id equal to node_id
+    const children = nodes.filter(node => node.parent_id === node_id);
+    if (children.length > 0) {
+        for (const child of children) {
+            await DeleteNode(child.id, graph, nodes);
+        }
+        await DeleteSingleNode(node_id, graph);
+    }
+    else {
+        await DeleteSingleNode(node_id, graph)
+    }
+}
+
+const DeleteSingleNode = async (node_id, graph) => {
+    const { data: { user } } = await supabase_client.auth.getUser()
+    console.log("Deleting node user for node_id:", node_id, "and user_id:", user.id);
+    const { data, error } = await supabase_client
+        .from('nodeusers')
+        .delete()
+        .eq('node_id', node_id)
+        .eq('user_id', user.id);
+    if (error) {
+        console.error("Error deleting node user:", error);
+        throw error;
+    }
+}
