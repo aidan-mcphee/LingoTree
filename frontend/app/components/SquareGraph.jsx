@@ -7,6 +7,10 @@ import ContextMenu from "./ContextMenu";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
 import { OnClickNode } from "../utils/graphInputHandler";
 
+const NODESIZE = 15;
+const EDGESIZE = 3;
+const NODE_DISTANCE = 1000;
+
 function GraphEvents({ setPopupOpen, setPopupContent, setPopupTitle, setContextMenu }) {
     const sigma = useSigma();
     const registerEvents = useRegisterEvents();
@@ -32,10 +36,10 @@ function GraphEvents({ setPopupOpen, setPopupContent, setPopupTitle, setContextM
     }, [registerEvents]);
 };
 
-export const LoadGraph = ({ data }) => {
+export const LoadGraph = ({ data, onGraphLoaded }) => {
     const loadGraph = useLoadGraph();
     const depthMap = calculateDepths(data);
-    const positionMap = calculatePositions(data, depthMap);
+    const positionMap = calculatePositions(data, depthMap, NODE_DISTANCE);
 
     useEffect(() => {
         const graph = new Graph();
@@ -45,7 +49,7 @@ export const LoadGraph = ({ data }) => {
             graph.addNode(node.id.toString(), {
                 x: positionMap.get(node.id)?.x || 0,
                 y: positionMap.get(node.id)?.y || 0,
-                size: 15,
+                size: NODESIZE,
                 label: node.title, 
                 color: "#FA4F40",
                 metadata: {
@@ -60,22 +64,44 @@ export const LoadGraph = ({ data }) => {
                 graph.addEdge(
                     node.parent_id.toString(),
                     node.id.toString(),
-                    { type: "arrow", size: 3 }  // Custom edge properties
+                    { type: "arrow", size: EDGESIZE }  // Custom edge properties
                 );
             }
         });
 
         loadGraph(graph);
-    }, [data, loadGraph]);
+
+        if (onGraphLoaded) {
+            onGraphLoaded(graph);
+        }
+    }, [data, loadGraph, onGraphLoaded]);
 
     return null;
 };
+
+function DynamicCameraBoundaries({ graph }) {
+  const sigma = useSigma();
+  useEffect(() => {
+    const nodes = graph.nodes();
+    const xs = nodes.map(id => graph.getNodeAttribute(id, "x"));
+    const ys = nodes.map(id => graph.getNodeAttribute(id, "y"));
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const tolerance = Math.max(maxX - minX, maxY - minY) / 2;
+    console.log("Setting camera pan boundaries with tolerance:", tolerance);
+    sigma.setSettings({ cameraPanBoundaries: { tolerance } });
+  }, [graph]);
+  return null;
+}
 
 export default function SquareGraph({ data }) {
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupContent, setPopupContent] = useState({ markdown: "", translations: [] });
     const [popupTitle, setPopupTitle] = useState("");
     const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, node: null });
+    const [graph, setGraph] = useState(null);
 
     // Hide context menu on click elsewhere
     useEffect(() => {
@@ -86,10 +112,17 @@ export default function SquareGraph({ data }) {
         return () => window.removeEventListener("click", handleClick);
     }, [contextMenu.visible]);
 
+    const settings = {
+        minCameraRatio : 0.01,
+        maxCameraRatio : 1,
+        cameraPanBoundaries: { tolerance: 100 }
+    }
+
     return (
         <div className="w-full h-full" onContextMenu={e => e.preventDefault()} style={{ position: "relative" }} >
-            <SigmaContainer className="w-full h-full">
-                <LoadGraph data={data} />
+            <SigmaContainer className="w-full h-full" settings={settings} zoomToSizeRatioFunction={() => 1}>
+                <LoadGraph data={data} onGraphLoaded={setGraph} />
+                {graph && <DynamicCameraBoundaries graph={graph} />}
                 <GraphEvents setPopupOpen={setPopupOpen} setPopupContent={setPopupContent} setPopupTitle={setPopupTitle} setContextMenu={setContextMenu} />
             </SigmaContainer>
             <NodePopup open={popupOpen} onClose={() => setPopupOpen(false)} markdown={popupContent.markdown} translations={popupContent.translations} title={popupTitle} />

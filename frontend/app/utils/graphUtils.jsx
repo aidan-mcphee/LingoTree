@@ -33,7 +33,7 @@ export const circularCoordsToCartesian = (radius, angle, center) => {
     };
 }
 
-export const calculatePositions = (nodes, depthMap) => {
+export const calculatePositions = (nodes, depthMap, nodeDistance) => {
     const positionMap = new Map();
     const childrenMap = new Map();
     const angleRanges = new Map(); // Stores { startAngle, angleSpan } for each node
@@ -69,7 +69,7 @@ export const calculatePositions = (nodes, depthMap) => {
         // 3. Get parent's angle allocation
         const { startAngle: parentStart, angleSpan: parentSpan } = angleRanges.get(parentNode.id);
         const childAngleSpan = parentSpan / numChildren;
-        const radius = depthMap.get(parentNode.id) + 1; // Depth-based radius
+        const radius = (depthMap.get(parentNode.id) + 1) * nodeDistance; // Depth-based radius
 
         children.forEach((child, index) => {
             // 4. Calculate child's angle range
