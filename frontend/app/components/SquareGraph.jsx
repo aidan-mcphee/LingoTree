@@ -6,6 +6,7 @@ import NodePopup from "./NodePopup";
 import ContextMenu from "./ContextMenu";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
 import { OnClickNode } from "../utils/graphInputHandler";
+import { GenerateChildrenNodes } from "../utils/ContextMenuFunctions";
 
 const NODESIZE = 15;
 const EDGESIZE = 3;
@@ -23,7 +24,6 @@ function GraphEvents({ setPopupOpen, setPopupContent, setPopupTitle, setContextM
                 const {x, y} = nodeAttributes;
 
                 const screenCoords = sigma.graphToViewport({ x, y });
-                console.log("Screen coordinates:", screenCoords);
 
                 setContextMenu({
                     visible: true,
@@ -90,7 +90,6 @@ function DynamicCameraBoundaries({ graph }) {
     const minY = Math.min(...ys);
     const maxY = Math.max(...ys);
     const tolerance = Math.max(maxX - minX, maxY - minY) / 2;
-    console.log("Setting camera pan boundaries with tolerance:", tolerance);
     sigma.setSettings({ cameraPanBoundaries: { tolerance } });
   }, [graph]);
   return null;
@@ -134,7 +133,7 @@ export default function SquareGraph({ data }) {
                     {
                         label: "Generate children",
                         onClick: () => {
-                            console.log("Generate children for node:", contextMenu.node);
+                            GenerateChildrenNodes(contextMenu.node);
                         }
                     },
                     {
