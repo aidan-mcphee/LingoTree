@@ -32,7 +32,7 @@ export default function Login() {
                 <Auth
                     supabaseClient={supabase_client}
                     appearance={{ theme: ThemeSupa }}
-                    providers={["google", "github"]}
+                    providers={["google"]}
                 />
             </div>
         </div>
