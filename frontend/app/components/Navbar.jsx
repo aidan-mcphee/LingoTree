@@ -11,7 +11,6 @@ export default function Navbar() {
         if (session) {
             setLinks([
                 { to: "/home", label: "Home" },
-                { to: "/upload", label: "Upload" },
                 { to: "/test", label: "Test" },
                 { to: "/", label: "About" },
                 { to: "/logout", label: "Logout" },

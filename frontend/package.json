@@ -8,6 +8,7 @@
     "start": "react-router-serve ./build/server/index.js"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
     "@react-sigma/core": "^5.0.2",

@@ -47,7 +47,7 @@ export function Layout({ children }) {
         }}
       >
         <Navbar style={{ flex: "0 0 60px", height: 60 }} />
-        <main style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
+        <main style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
           {children}
         </main>
         <ScrollRestoration />
