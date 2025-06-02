@@ -7,6 +7,7 @@ import ContextMenu from "./ContextMenu";
 import { calculateDepths, calculatePositions } from "../utils/graphUtils";
 import { OnClickNode } from "../utils/graphInputHandler";
 import { GenerateChildrenNodes, DeleteNode } from "../utils/ContextMenuFunctions";
+import { supabase_client } from "../components/supabase-client";
 
 const NODESIZE = 15;
 const EDGESIZE = 3;
@@ -136,7 +137,7 @@ export default function SquareGraph({ data, setNodes }) {
                         onClick: async () => {
                             await GenerateChildrenNodes(contextMenu.node, graph);
                             await new Promise(resolve => setTimeout(resolve, 300));
-                            const { data: newNodes } = await import("../components/supabase-client").then(m => m.supabase_client.from('nodes').select('*'));
+                            const { data: newNodes } = await supabase_client.from('nodes').select('*');
                             setNodes(newNodes);
                         }
                     },
@@ -145,7 +146,9 @@ export default function SquareGraph({ data, setNodes }) {
                         onClick: async () => {
                             await DeleteNode(contextMenu.node, graph, data);
                             // Re-fetch nodes after deletion
-                            const { data: newNodes } = await import("../components/supabase-client").then(m => m.supabase_client.from('nodes').select('*'));
+                            const { data: newNodes } = await supabase_client
+                                .from('nodes')
+                                .select('*');
                             setNodes(newNodes);
                         }
                     }
