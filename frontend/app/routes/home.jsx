@@ -46,6 +46,6 @@ export default function Home() {
   }
 
   return (
-    <SquareGraph data={nodes} />
+    <SquareGraph data={nodes} setNodes={setNodes} />
   );
 }

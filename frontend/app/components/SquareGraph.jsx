@@ -95,7 +95,7 @@ function DynamicCameraBoundaries({ graph }) {
   return null;
 }
 
-export default function SquareGraph({ data }) {
+export default function SquareGraph({ data, setNodes }) {
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupContent, setPopupContent] = useState({ markdown: "", translations: [] });
     const [popupTitle, setPopupTitle] = useState("");
@@ -133,14 +133,20 @@ export default function SquareGraph({ data }) {
                 items={[
                     {
                         label: "Generate children",
-                        onClick: () => {
-                            GenerateChildrenNodes(contextMenu.node, graph);
+                        onClick: async () => {
+                            await GenerateChildrenNodes(contextMenu.node, graph);
+                            // Re-fetch nodes after generation
+                            const { data: newNodes } = await import("../components/supabase-client").then(m => m.supabase_client.from('nodes').select('*'));
+                            setNodes(newNodes);
                         }
                     },
                     {
                         label : "Remove node",
-                        onClick: () => {
-                            DeleteNode(contextMenu.node, graph, data);
+                        onClick: async () => {
+                            await DeleteNode(contextMenu.node, graph, data);
+                            // Re-fetch nodes after deletion
+                            const { data: newNodes } = await import("../components/supabase-client").then(m => m.supabase_client.from('nodes').select('*'));
+                            setNodes(newNodes);
                         }
                     }
                 ]}
