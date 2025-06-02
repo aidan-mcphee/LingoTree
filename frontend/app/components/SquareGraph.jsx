@@ -51,7 +51,7 @@ export const LoadGraph = ({ data, onGraphLoaded }) => {
                 y: positionMap.get(node.id)?.y || 0,
                 size: NODESIZE,
                 label: node.title, 
-                color: "#FA4F40",
+                color: node.is_universal ? "#FF5733" : "#3498DB", // Universal nodes in red, others in blue
                 metadata: {
                     markdown: node.lesson_md || "",
                 }
