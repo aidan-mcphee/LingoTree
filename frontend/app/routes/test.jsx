@@ -41,8 +41,14 @@ export default function Test() {
 
     useEffect(() => {
         if (translations.length > 0) {
-            // Generate 10 random tests
-            const picked = shuffle([...translations]).slice(0, 10);
+            // Generate 10 unique random tests
+            const available = [...translations];
+            const picked = [];
+            while (picked.length < 10 && available.length > 0) {
+                const idx = Math.floor(Math.random() * available.length);
+                picked.push(available[idx]);
+                available.splice(idx, 1);
+            }
             const testList = picked.map(t => {
                 // Randomly decide direction
                 const direction = Math.random() < 0.5 ? "toTranslation" : "toOriginal";
