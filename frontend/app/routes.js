@@ -6,4 +6,5 @@ export default [
     route("login", "routes/login.jsx"),
     route("logout", "routes/Logout.jsx"),
     route("callback", "routes/Callback.jsx"),
-];
+    route("test", "routes/test.jsx"),
+]
