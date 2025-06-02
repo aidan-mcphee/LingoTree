@@ -135,7 +135,7 @@ export default function SquareGraph({ data, setNodes }) {
                         label: "Generate children",
                         onClick: async () => {
                             await GenerateChildrenNodes(contextMenu.node, graph);
-                            // Re-fetch nodes after generation
+                            await new Promise(resolve => setTimeout(resolve, 300));
                             const { data: newNodes } = await import("../components/supabase-client").then(m => m.supabase_client.from('nodes').select('*'));
                             setNodes(newNodes);
                         }
