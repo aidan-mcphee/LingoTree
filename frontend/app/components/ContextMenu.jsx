@@ -16,14 +16,23 @@ export default function ContextMenu({ visible, x, y, items = [], onClose }) {
                 padding: 0,
                 margin: 0,
                 listStyle: "none",
-                minWidth: 100
+                minWidth: 100,
+                color: "#222",
+                // Add dark mode support
+                backgroundColor: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '#23272f' : 'white',
+                color: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#222',
+                border: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '1px solid #444' : '1px solid #ccc',
             }}
         >
             {items.length > 0 ? (
                 items.map((item, idx) => (
                     <li
                         key={idx}
-                        style={{ padding: "8px 16px", cursor: "pointer" }}
+                        style={{
+                            padding: "8px 16px",
+                            cursor: "pointer",
+                            color: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#222',
+                        }}
                         onClick={() => {
                             item.onClick && item.onClick();
                             onClose && onClose();
@@ -33,7 +42,7 @@ export default function ContextMenu({ visible, x, y, items = [], onClose }) {
                     </li>
                 ))
             ) : (
-                <li style={{ padding: "8px 16px", color: "#999" }}>No options available</li>
+                <li style={{ padding: "8px 16px", color: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '#aaa' : '#999' }}>No options available</li>
             )}
         </ul>
     );
