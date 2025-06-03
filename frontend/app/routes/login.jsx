@@ -31,7 +31,18 @@ export default function Login() {
             <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded shadow">
                 <Auth
                     supabaseClient={supabase_client}
-                    appearance={{ theme: ThemeSupa }}
+                    appearance={{
+                        theme: ThemeSupa,
+                        variables: {
+                            default: {
+                                colors: {
+                                    brand: '#51A2FF',
+                                    brandAccent: '#51A2FF',
+                                    inputText: '#FFFFFF',
+                                },
+                            },
+                        },
+                    }}
                     providers={["google"]}
                 />
             </div>

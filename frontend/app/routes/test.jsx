@@ -41,14 +41,8 @@ export default function Test() {
 
     useEffect(() => {
         if (translations.length > 0) {
-            // Generate 10 unique random tests
-            const available = [...translations];
-            const picked = [];
-            while (picked.length < 10 && available.length > 0) {
-                const idx = Math.floor(Math.random() * available.length);
-                picked.push(available[idx]);
-                available.splice(idx, 1);
-            }
+            // Generate 10 random tests
+            const picked = shuffle([...translations]).slice(0, 10);
             const testList = picked.map(t => {
                 // Randomly decide direction
                 const direction = Math.random() < 0.5 ? "toTranslation" : "toOriginal";
@@ -112,18 +106,18 @@ export default function Test() {
 
     if (finished) {
         return (
-            <div className="flex flex-col items-center justify-center h-full p-8">
-                <h1 className="text-2xl font-bold mb-4">Test Complete!</h1>
-                <div className="mb-4">Here are your results:</div>
-                <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl mb-6 border-4 border-blue-500">
-                    <table className="w-full table-auto border border-gray-300 rounded-lg bg-white">
+            <div className="flex flex-col items-center justify-center h-full p-8 bg-gray-50 dark:bg-gray-900">
+                <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Test Complete!</h1>
+                <div className="mb-4 text-gray-900 dark:text-white">Here are your results:</div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-4xl mb-6 border-4 border-blue-500">
+                    <table className="w-full table-auto border border-gray-300 rounded-lg bg-white dark:bg-gray-800">
                         <thead>
                             <tr>
-                                <th className="px-4 py-2 border-b text-left">#</th>
-                                <th className="px-4 py-2 border-b text-left">Korean</th>
-                                <th className="px-4 py-2 border-b text-left">English</th>
-                                <th className="px-4 py-2 border-b text-left">Your Answer</th>
-                                <th className="px-4 py-2 border-b text-left">Result</th>
+                                <th className="px-4 py-2 border-b text-left text-gray-900 dark:text-white">#</th>
+                                <th className="px-4 py-2 border-b text-left text-gray-900 dark:text-white">Korean</th>
+                                <th className="px-4 py-2 border-b text-left text-gray-900 dark:text-white">English</th>
+                                <th className="px-4 py-2 border-b text-left text-gray-900 dark:text-white">Your Answer</th>
+                                <th className="px-4 py-2 border-b text-left text-gray-900 dark:text-white">Result</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -134,12 +128,12 @@ export default function Test() {
                                 // Find the user's selected answer
                                 const userAnswer = r.selected;
                                 return (
-                                    <tr key={idx} className="even:bg-gray-50">
-                                        <td className="px-4 py-2 border-b">{idx + 1}</td>
-                                        <td className="px-4 py-2 border-b">{korean}</td>
-                                        <td className="px-4 py-2 border-b">{english}</td>
-                                        <td className="px-4 py-2 border-b">{userAnswer}</td>
-                                        <td className={`px-4 py-2 border-b font-bold ${r.correct ? 'text-green-600' : 'text-red-600'}`}>{r.correct ? 'Correct' : 'Incorrect'}</td>
+                                    <tr key={idx} className="even:bg-gray-50 dark:even:bg-gray-700">
+                                        <td className="px-4 py-2 border-b text-gray-900 dark:text-white">{idx + 1}</td>
+                                        <td className="px-4 py-2 border-b text-gray-900 dark:text-white">{korean}</td>
+                                        <td className="px-4 py-2 border-b text-gray-900 dark:text-white">{english}</td>
+                                        <td className="px-4 py-2 border-b text-gray-900 dark:text-white">{userAnswer}</td>
+                                        <td className={`px-4 py-2 border-b font-bold ${r.correct ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>{r.correct ? 'Correct' : 'Incorrect'}</td>
                                     </tr>
                                 );
                             })}
@@ -162,16 +156,16 @@ export default function Test() {
     const test = tests[current];
 
     return (
-        <div className="flex flex-col items-center justify-center h-full p-8">
-            <div className="bg-white rounded-lg shadow-md p-8 max-w-lg w-full">
-                <div className="mb-4 text-lg font-semibold">Question {current + 1} of {tests.length}</div>
-                <div className="mb-6 text-xl font-bold text-center">{test.direction === "toTranslation" ? "Translate to Korean:" : "Translate to English:"}</div>
-                <div className="mb-6 text-2xl text-center">{test.question}</div>
+        <div className="flex flex-col items-center justify-center h-full p-8 bg-gray-50 dark:bg-gray-900">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-lg w-full">
+                <div className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Question {current + 1} of {tests.length}</div>
+                <div className="mb-6 text-xl font-bold text-center text-gray-900 dark:text-white">{test.direction === "toTranslation" ? "Translate to Korean:" : "Translate to English:"}</div>
+                <div className="mb-6 text-2xl text-center text-gray-900 dark:text-white">{test.question}</div>
                 <div className="grid grid-cols-1 gap-4">
                     {test.options.map((opt, idx) => (
                         <button
                             key={idx}
-                            className="w-full px-4 py-2 bg-blue-100 hover:bg-blue-300 rounded text-lg transition-colors"
+                            className="w-full px-4 py-2 bg-blue-100 dark:bg-blue-700 hover:bg-blue-300 dark:hover:bg-blue-500 rounded text-lg transition-colors text-gray-900 dark:text-white"
                             onClick={() => handleAnswer(opt)}
                         >
                             {opt}
