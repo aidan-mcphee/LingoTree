@@ -1,6 +1,0 @@
-random colors
-breathing colors when generating
-make nodes appear after generation / disapear on deletion
-other pages???
-upload??
-test for sure
